@@ -22,6 +22,7 @@ const AuthDrawer: FC<Props> = ({ drawerId }) => {
               icon={<IoPersonCircleOutline size={20} />}
               name="Login"
               modalId="loginId"
+              number={1}
             />
           </li>
           <li>
@@ -29,6 +30,7 @@ const AuthDrawer: FC<Props> = ({ drawerId }) => {
               icon={<IoMdLogIn size={20} />}
               name="Sign up"
               modalId="signupId"
+              number={2}
             />
           </li>
           <li className="w-full">

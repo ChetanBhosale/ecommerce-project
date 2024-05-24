@@ -5,15 +5,18 @@ import { IoPersonCircleOutline } from "react-icons/io5";
 import { IoMdLogIn } from "react-icons/io";
 import ThemeProviderBtn from "./header/ThemeProviderBtn";
 import Cart from "./header/Cart";
-import ExModal from "./auth/ExModal";
-import Login from "./auth/Login";
-import Signup from "./auth/Signup";
 import MobileHeader from "./auth/MobileHeader";
 import AuthDrawer from "./auth/AuthDrawer";
+import ExModal from "./auth/ExModal";
+import Profile from "./header/Profile";
+import { useSelector } from "react-redux";
+import { authSlice } from "../@types/authSlice";
 
 type Props = object;
 
 const MainHeader: FC<Props> = () => {
+  const { user } = useSelector((state: authSlice) => state.auth);
+
   return (
     <nav className="navbar shadow-sm px-12">
       <div className="navbar-start flex-1 gap-10">
@@ -23,23 +26,30 @@ const MainHeader: FC<Props> = () => {
         <SearchBar />
       </div>
       <div className="navbar-end gap-2 hidden 1000px:flex">
-        <NavBtn
-          icon={<IoPersonCircleOutline size={20} />}
-          name="Login"
-          modalId="loginId"
-        />
-        <NavBtn
-          icon={<IoMdLogIn size={20} />}
-          name="Sign up"
-          modalId="signupId"
-        />
+        {user === null && (
+          <>
+            <NavBtn
+              icon={<IoPersonCircleOutline size={20} />}
+              name="Login"
+              modalId="ModalPage"
+              number={1}
+            />
+            <NavBtn
+              icon={<IoMdLogIn size={20} />}
+              name="Sign up"
+              modalId="ModalPage"
+              number={2}
+            />
+          </>
+        )}
+
         <Cart />
         <ThemeProviderBtn />
+        {user !== null && <Profile />}
       </div>
       <MobileHeader />
-      <ExModal modalId="loginId" ComponentWork={<Login />} />
-      <ExModal modalId="signupId" ComponentWork={<Signup />} />
       <AuthDrawer drawerId="mobileHeaderDrawer" />
+      <ExModal modalId="ModalPage" />
     </nav>
   );
 };
