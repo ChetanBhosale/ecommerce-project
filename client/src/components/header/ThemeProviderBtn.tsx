@@ -3,7 +3,7 @@ import { FC, useEffect, useState } from "react";
 type Props = object;
 const ThemeProviderBtn: FC<Props> = () => {
   const [theme, setTheme] = useState<string>(
-    localStorage.getItem("theme") ? localStorage.getItem("theme")! : "forest"
+    localStorage.getItem("theme") ? localStorage.getItem("theme")! : "luxury"
   );
 
   useEffect(() => {
@@ -12,7 +12,7 @@ const ThemeProviderBtn: FC<Props> = () => {
   }, [theme]);
 
   const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === "forest" ? "emerald" : "forest"));
+    setTheme((prevTheme) => (prevTheme === "luxury" ? "lofi" : "luxury"));
   };
   // emerald is the another themen
 

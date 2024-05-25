@@ -54,7 +54,7 @@ const Login: React.FC<LoginProps> = ({ closeModal }) => {
 
   useEffect(() => {
     if (isSuccess) {
-      closeModal(); // Close the modal on successful login
+      closeModal();
     }
     if (error) {
       if ("data" in error) {
@@ -125,7 +125,7 @@ const Login: React.FC<LoginProps> = ({ closeModal }) => {
           <div className="divider">OR</div>
           <div className="form-control">
             <button
-              className={`btn btn-outline btn-secondary w-full ${
+              className={`btn btn-outline w-full ${
                 isLoading && "btn-disabled"
               }`}
               type="button"

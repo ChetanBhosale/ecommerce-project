@@ -1,8 +1,11 @@
 import { FC } from "react";
 import { useDispatch } from "react-redux";
 import { changePage } from "../../../store/storage/authSlice";
-
-const ForgotPassword: FC = () => {
+interface Props {
+  closeModal: () => void;
+}
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const ForgotPassword: FC<Props> = ({ closeModal }) => {
   const dispatch = useDispatch();
   return (
     <div className="w-full bg-base-100">

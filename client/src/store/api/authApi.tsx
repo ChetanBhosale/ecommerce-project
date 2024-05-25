@@ -1,5 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { userLoggedIn, userLoggedOut } from "../storage/authSlice";
+import {
+  userLoggedIn,
+  userLoggedOut,
+  userRegistration,
+} from "../storage/authSlice";
+import { ISignupData } from "../../components/auth/@types/Validation";
 
 // Define the data types
 interface ILoginData {
@@ -44,7 +49,7 @@ export const authApi = createApi({
           dispatch(
             userLoggedIn({
               accessToken: result.data.accessToken,
-              user: result.data.user,
+              user: result.data.data,
             })
           );
         } catch (error: any) {
@@ -89,8 +94,38 @@ export const authApi = createApi({
         }
       },
     }),
+    signupUser: builder.mutation<any, ISignupData>({
+      query: (data) => ({
+        url: "register",
+        method: "POST",
+        credentials: "include" as const,
+        body: data,
+      }),
+      async onQueryStarted(_args, { queryFulfilled, dispatch }) {
+        try {
+          const result: any = await queryFulfilled;
+          console.log(result);
+          dispatch(userRegistration(result.data.token));
+        } catch (error: any) {
+          console.log(error);
+        }
+      },
+    }),
+    activeUser: builder.mutation<any, { code: string }>({
+      query: (data) => ({
+        url: "active-user",
+        method: "POST",
+        body: data,
+        credentials: "include" as const,
+      }),
+    }),
   }),
 });
 
-export const { useLoginUserMutation, useLoadUserQuery, useLogoutMutation } =
-  authApi;
+export const {
+  useLoginUserMutation,
+  useSignupUserMutation,
+  useLoadUserQuery,
+  useLogoutMutation,
+  useActiveUserMutation,
+} = authApi;

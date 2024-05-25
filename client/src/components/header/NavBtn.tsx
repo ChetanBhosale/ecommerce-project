@@ -15,7 +15,7 @@ const NavBtn: FC<Props> = ({ icon, name, modalId, number }) => {
   return (
     <label
       htmlFor={modalId}
-      className="btn btn-md text-head btn-primary-content w-full 1000px:w-max 1000px:btn-ghost  tracking-wide"
+      className="btn btn-md font-head text-md font-normal uppercase btn-primary-content w-full 1000px:w-max 1000px:btn-ghost"
       onClick={() => {
         dispatch(changePage(number));
       }}

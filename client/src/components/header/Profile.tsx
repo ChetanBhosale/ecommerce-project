@@ -23,11 +23,10 @@ const Profile = () => {
         alert(errorData.data.message);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error, isSuccess, data]);
 
   return (
-    <div className="dropdown dropdown-end">
+    <div className="dropdown dropdown-end ">
       <div tabIndex={0} role="button" className="btn btn-circle btn-md avatar">
         <div className="w-10 rounded-full">
           <img

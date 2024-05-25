@@ -25,9 +25,9 @@ const ExModal: FC<Props> = ({ modalId }) => {
       case 2:
         return <Signup />;
       case 3:
-        return <ForgotPassword />;
+        return <ForgotPassword closeModal={closeModal} />;
       default:
-        return <Otp />;
+        return <Otp closeModal={closeModal} />;
     }
   };
 
@@ -41,7 +41,7 @@ const ExModal: FC<Props> = ({ modalId }) => {
         onChange={() => setIsOpen(!isOpen)}
       />
       <div className="modal">
-        <div className="modal-box relative">{renderModalContent()}</div>
+        <div className="modal-box">{renderModalContent()}</div>
         <label className="modal-backdrop" htmlFor={modalId}></label>
       </div>
     </>

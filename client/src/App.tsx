@@ -1,11 +1,11 @@
 import { Route, Routes } from "react-router";
-import MainHeader from "./components/MainHeader";
+import Home from "./page/Home";
 
 const App = () => {
   return (
     <>
       <Routes>
-        <Route path="/" element={<MainHeader />} />
+        <Route path="/" element={<Home />} />
       </Routes>
     </>
   );

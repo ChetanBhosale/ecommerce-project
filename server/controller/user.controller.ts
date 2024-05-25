@@ -67,6 +67,7 @@ export const registerUser = CatchAsyncError(
       .status(201)
       .json({
         message: "Activation code has been sent to your email!",
+        token: activationToken,
       });
   }
 );
@@ -82,7 +83,9 @@ export const activeUser = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { code } = req.body;
+      console.log(req.body);
       const { activationToken } = req.cookies;
+      console.log(req.cookies);
 
       if (!code || !activationToken) {
         return next(
@@ -94,6 +97,8 @@ export const activeUser = CatchAsyncError(
         activationToken,
         AccessTokenSecret!
       ) as IActivationData;
+
+      console.log(newUser);
 
       if (newUser.code !== code) {
         return next(new ErrorHandler("Invalid Activation Code", 400));
@@ -143,9 +148,11 @@ export const loginUser = CatchAsyncError(
         );
       }
 
-      const user = await userModel.findOne({
-        email: new RegExp(`^${email}$`, "i"),
-      });
+      const user = await userModel
+        .findOne({
+          email: new RegExp(`^${email}$`, "i"),
+        })
+        .populate("cart");
 
       if (!user) {
         return next(new ErrorHandler("user does't exists!", 400));
@@ -245,6 +252,7 @@ export const userDetails = CatchAsyncError(
     try {
       res.json({
         data: req.user,
+        accessToken: req.cookies.access_token,
       });
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 400));

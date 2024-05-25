@@ -17,6 +17,10 @@ export interface ISignupData {
   user: string;
 }
 
+export interface IOtp {
+  otp: number;
+}
+
 // zod validation
 
 export const ILogin = z.object({

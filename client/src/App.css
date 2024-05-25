@@ -1,0 +1,18 @@
+.modal {
+  @apply fixed inset-0 flex items-center justify-center;
+  z-index: 50;
+}
+
+.modal-box {
+  @apply bg-white p-6 rounded-lg shadow-lg;
+  z-index: 50;
+}
+
+.modal-backdrop {
+  @apply fixed inset-0 bg-black opacity-50;
+  z-index: 40;
+}
+
+.hero-section {
+  z-index: 10;
+}
