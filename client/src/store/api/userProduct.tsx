@@ -20,7 +20,7 @@ export interface ProductView {
     description: string;
     category: string;
     state: string;
-    images: string[];
+    images: any;
     price: number;
     less: number;
     totalPurchase: number;

@@ -1,4 +1,6 @@
 import { IProduct, useGetProductsQuery } from "../../store/api/userProduct";
+import "./MostRecent.css";
+import Card from "../products/Card";
 
 const MostRecent = () => {
   const { data, isLoading } = useGetProductsQuery({
@@ -6,36 +8,28 @@ const MostRecent = () => {
   });
 
   return (
-    <div className="w-full">
-      <h2 className=" pl-12 pt-4 text-2xl font-head font-bold mb-4">
-        Newly Lauched
+    <div className="w-full mb-8">
+      <h2 className="pl-12 pt-4 text-2xl font-head font-bold mb-4">
+        Recently Added
       </h2>
-      <div className="max-w-full h-56 overflow-x-hidden flex px-6 gap-2">
+      <div className="relative remove flex gap-4 overflow-y-hidden overflow-x-auto px-6 py-3">
         {isLoading ? (
-          <div>
+          <>
             {Array(10)
               .fill(null)
               .map((_, index) => (
-                <div key={index} className="flex flex-col gap-4 w-72 h-full">
+                <div key={index} className="flex flex-col h-full gap-4 w-52">
                   <div className="skeleton h-32 w-full"></div>
-                  <div className="skeleton h-8 w-28"></div>
-                  <div className="skeleton h-8 w-full"></div>
+                  <div className="skeleton h-4 w-28"></div>
+                  <div className="skeleton h-4 w-full"></div>
                   <div className="skeleton h-4 w-full"></div>
                 </div>
               ))}
-          </div>
+          </>
         ) : (
           <>
-            {data.products.map((ele: IProduct, index: number) => (
-              <div key={index} className="w-full bg-green-400">
-                {ele.images.length === 0 ? (
-                  <>
-                    <img src="" alt="" />
-                  </>
-                ) : (
-                  <></>
-                )}
-              </div>
+            {data?.products.map((product: IProduct, index: number) => (
+              <Card key={index} index={index} product={product} />
             ))}
           </>
         )}
