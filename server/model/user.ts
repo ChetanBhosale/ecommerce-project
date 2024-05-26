@@ -14,8 +14,7 @@ export interface IUser extends Document {
     url: string;
   };
   role: string;
-  cart : ICart | string
-  createCart: (id: string) => Promise<void>;
+  cart: ICart | string;
   comparedPassword: (password: string) => Promise<boolean>;
   SignAccessToken: () => string;
   SignRefreshToken: () => string;
@@ -29,29 +28,29 @@ const userSchema: Schema<IUser> = new mongoose.Schema(
   {
     email: {
       type: String,
-      required: [true, 'please enter your email'],
+      required: [true, "please enter your email"],
       validate: {
         validator: function (value: string) {
           return emailRegaxPattern.test(value);
-        }
-      }
+        },
+      },
     },
     password: {
       type: String,
-      required: [true, 'please enter password'],
+      required: [true, "please enter password"],
     },
     avatar: {
       public_id: String,
-      url: String
+      url: String,
     },
     role: {
       type: String,
-      enum: ["USER", "SELLER"]
+      enum: ["USER", "SELLER"],
     },
-    cart : {
-      type : mongoose.Schema.Types.ObjectId,
-      ref : "cart"
-    }
+    cart: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "cart",
+    },
   },
   { timestamps: true }
 );
@@ -64,12 +63,6 @@ userSchema.pre<IUser>("save", async function (next) {
   this.password = await bcrypt.hash(this.password, 10);
   next();
 });
-
-// Method to Create Cart
-userSchema.methods.createCart = async function (id: string) {
-  let data = await cartModel.create({ user: id });
-  return data
-};
 
 // Method to Compare Password
 userSchema.methods.comparedPassword = async function (
@@ -89,58 +82,61 @@ userSchema.methods.SignRefreshToken = function () {
 };
 
 // User Model
-export const userModel: Model<IUser> = mongoose.model('user', userSchema);
+export const userModel: Model<IUser> = mongoose.model("user", userSchema);
 
 // User Address Interface
 export interface IAddress extends Document {
-  name : string,
+  name: string;
   contact1: number;
-  contact2:number;
+  contact2: number;
   lane1: string;
   lane2: string;
   zipcode: number;
   city: string;
   state: string;
   country: string;
-  user ?: string;
+  user?: string;
 }
 
 // User Address Schema
 const userAddressSchema: Schema<IAddress> = new mongoose.Schema({
   lane1: {
     type: String,
-    required: true
+    required: true,
   },
   lane2: String,
   zipcode: Number,
   city: {
     type: String,
-    required: true
+    required: true,
   },
   state: {
     type: String,
-    required: true
+    required: true,
   },
   country: {
     type: String,
-    required: true
+    required: true,
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "user"
+    ref: "user",
   },
-  name : {
-    type : String,
-    required : [true,'please enter your name']
+  name: {
+    type: String,
+    required: [true, "please enter your name"],
   },
-  contact1 : {
-    type : Number,
-    required : [true,'please enter contact number']
+  contact1: {
+    type: Number,
+    required: [true, "please enter contact number"],
   },
-  contact2 : {
-    type : Number
-  }
+  contact2: {
+    type: Number,
+  },
 });
 
 // User Address Model
-export const userAddressModel: Model<IAddress> = mongoose.model('userAddress', userAddressSchema);
+export const userAddressModel: Model<IAddress> = mongoose.model(
+  "userAddress",
+  userAddressSchema
+);

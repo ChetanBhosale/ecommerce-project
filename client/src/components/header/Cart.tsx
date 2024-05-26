@@ -29,7 +29,7 @@ const Cart: FC<Props> = () => {
           </svg>
           {user !== null && (
             <span className="badge badge-sm indicator-item">
-              {user.cart.products.length}
+              {user?.cart?.products.length}
             </span>
           )}
         </div>
@@ -41,7 +41,7 @@ const Cart: FC<Props> = () => {
         >
           <div className="card-body">
             <span className="font-bold text-lg">
-              {user.cart.products.length}Items
+              {user?.cart?.products.length}Items
             </span>
 
             <span className="text-info">Subtotal: $999</span>

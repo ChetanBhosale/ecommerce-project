@@ -121,8 +121,15 @@ export const activeUser = CatchAsyncError(
         role,
       });
 
-      let cart: ICart = user.createCart(user._id) as unknown as ICart;
-      user.cart = cart._id as string;
+      const cart: ICart = await cartModel.create({
+        user: user._id,
+      });
+
+      console.log(cart);
+
+      user.cart = cart._id;
+      await user.save();
+
       res.status(201).json({
         success: true,
       });

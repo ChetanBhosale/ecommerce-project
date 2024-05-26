@@ -63,7 +63,7 @@ const Login: React.FC<LoginProps> = ({ closeModal }) => {
         alert(errorData.data.message);
       }
     }
-  }, [error, isSuccess, closeModal]);
+  }, [error, isSuccess]);
 
   return (
     <div className="w-full bg-base-100">
