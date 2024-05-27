@@ -12,7 +12,7 @@ const Card: FC<Props> = ({ index, product }) => {
   return (
     <div
       key={index}
-      className="remove group hover:scale-105 transition-all ease-out duration-500 cursor-pointer w-64 border border-accent flex-shrink-0 h-[20rem] flex flex-col items-center  shadow-lg rounded-lg"
+      className="remove group hover:scale-105 transition-all ease-out duration-500 cursor-pointer w-64 flex-shrink-0 h-[20rem] flex flex-col items-center  shadow-sm shadow-accent rounded-lg"
     >
       <div className="w-full h-2/3 overflow-hidden">
         <img

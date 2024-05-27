@@ -171,12 +171,12 @@ export const getProducts = CatchAsyncError(
             $or: [
               { name: { $regex: search, $options: "i" } },
               { description: { $regex: search, $options: "i" } },
-              { category: { $regex: category, $options: "i" } },
               { state: { $regex: state, $options: "i" } },
             ],
           },
           { price: { $gte: fromPrice, $lte: toPrice } }, // Use parsed numbers here
           { user: req.user._id },
+          { category: { $regex: category, $options: "i" } },
         ],
       });
 
@@ -199,6 +199,8 @@ export const getProducts = CatchAsyncError(
         .sort({ [sort as string]: order === "asc" ? 1 : -1 })
         .skip(skip)
         .limit(parseInt(size as string));
+
+      console.log(products);
 
       res.status(200).json({
         success: true,
@@ -241,11 +243,11 @@ export const viewProductList = CatchAsyncError(
             $or: [
               { name: { $regex: search, $options: "i" } },
               { description: { $regex: search, $options: "i" } },
-              { category: { $regex: category, $options: "i" } },
               { state: { $regex: state, $options: "i" } },
             ],
           },
           { price: { $gte: fromPrice, $lte: toPrice } },
+          { category: { $regex: category, $options: "i" } },
         ],
       };
 

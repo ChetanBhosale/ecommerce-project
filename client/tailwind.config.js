@@ -22,6 +22,8 @@ export default {
   },
   plugins: [require("daisyui")],
   daisyui: {
-    themes: ["lofi", "luxury"],
+    themes: ["autumn", "forest"],
   },
 };
+
+// winter

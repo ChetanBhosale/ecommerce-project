@@ -10,15 +10,20 @@ import ExModal from "./auth/ExModal";
 import Profile from "./header/Profile";
 import { useSelector } from "react-redux";
 import { authSlice } from "../@types/authSlice";
+import { useNavigate } from "react-router";
 type Props = object;
 
 const MainHeader: FC<Props> = () => {
   const { user } = useSelector((state: authSlice) => state.auth);
+  const navigate = useNavigate();
 
   return (
-    <nav className="navbar shadow-md px-12 sticky z-40 bg-primary-content top-0">
+    <nav className="navbar bg-base-100 shadow-md px-12 sticky z-40 top-0">
       <div className="navbar-start flex-1 gap-10">
-        <h1 className="text-2xl flex gap-2 font-head font-extrabold tracking-wider">
+        <h1
+          className="text-2xl flex gap-2 font-head font-extrabold tracking-wider cursor-pointer"
+          onClick={() => navigate("/")}
+        >
           <svg
             width="30"
             height="30"
