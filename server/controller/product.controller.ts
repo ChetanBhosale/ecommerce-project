@@ -12,6 +12,8 @@ import {
 import cloudinary from "cloudinary";
 import mongoose, { get } from "mongoose";
 import { redis } from "../utils/redis";
+import { populate } from "dotenv";
+import { IUser } from "../model/user";
 
 export const createProduct = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -301,7 +303,6 @@ export const addToCart = CatchAsyncError(
       if (!getCart) {
         return next(new ErrorHandler("invalid request", 400));
       }
-      console.log(getCart);
       let isProductNotInCart: IcartProduct = getCart.products.find(
         (ele: any) => ele.product.toString() === id
       ) as unknown as IcartProduct;
@@ -315,8 +316,6 @@ export const addToCart = CatchAsyncError(
           color,
           size,
         });
-
-        console.log(createProduct);
 
         if (!createProduct) {
           return next(new ErrorHandler("invalid product!", 400));
@@ -332,21 +331,7 @@ export const addToCart = CatchAsyncError(
 
         isProductNotInCart.save();
       }
-
-      let newUpdatedCart: ICart = (await cartModel
-        .findById({ _id: req.user.cart })
-        .populate("products")) as ICart;
-      let total = 0;
-      // newUpdatedCart.products.forEach((ele) => {
-      //     total += ele.product.
-      // })
-
-      redis.set(newUpdatedCart?._id.toString(), JSON.stringify(newUpdatedCart));
-
-      return res.status(201).json({
-        success: true,
-        data: newUpdatedCart,
-      });
+      await utilityUpdateCart(res, next, req.user);
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 400));
     }
@@ -367,12 +352,13 @@ export const viewCart = CatchAsyncError(
       }
 
       let cart: ICart = (await cartModel
-        .findById({ _id: req.user.cart })
+        .findById({ _id: req.user.cart._id })
         .populate({
           path: "products",
           populate: {
             path: "product",
             model: "product",
+            select: "-user -totalPurchase -description -category",
           },
         })) as ICart;
 
@@ -389,6 +375,35 @@ export const viewCart = CatchAsyncError(
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 400));
     }
+  }
+);
+
+export const updateProductQuanity = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const cartProductId = req.params.id;
+    const increment = req.query.increment === "true";
+
+    const cartProduct = await cartProductModel.findById({ _id: cartProductId });
+
+    if (!cartProduct) {
+      return next(new ErrorHandler("cannot found product", 400));
+    }
+
+    console.log(cartProduct);
+
+    if (increment == true) {
+      cartProduct.quantity = cartProduct.quantity + 1;
+    } else {
+      cartProduct.quantity = cartProduct.quantity - 1;
+
+      if (cartProduct.quantity === 0) {
+        await cartProductModel.findByIdAndDelete(cartProduct._id);
+      }
+    }
+
+    // await cartProduct.save();
+
+    utilityUpdateCart(res, next, req.user);
   }
 );
 
@@ -435,3 +450,43 @@ export const removeFromCart = CatchAsyncError(
     }
   }
 );
+
+export const utilityUpdateCart = async (
+  res: Response,
+  next: NextFunction,
+  user: IUser | any
+) => {
+  try {
+    let updatedCart: any = (await cartModel
+      .findById({
+        _id: user.cart._id,
+      })
+      .populate({
+        path: "products",
+        populate: {
+          path: "product",
+          model: "product",
+          select: "-user",
+        },
+      })) as any;
+
+    console.log(updatedCart.products);
+
+    let total = 0;
+    updatedCart.products.forEach((ele: any) => {
+      total = total + ele.product.less * ele.quantity;
+    });
+
+    updatedCart.total = total;
+    updatedCart.save();
+
+    await redis.set(updatedCart._id.toString(), JSON.stringify(updatedCart));
+
+    return res.status(201).json({
+      success: true,
+      data: updatedCart,
+    });
+  } catch (error: any) {
+    return next(new ErrorHandler(error.any, 400));
+  }
+};
